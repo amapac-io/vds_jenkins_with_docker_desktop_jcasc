@@ -3,12 +3,12 @@ jenkins:
   - "JNLP4-connect"
   - "Ping"
   authorizationStrategy:
-    globalMatrix:
+    globalMatrix: # <.>
       permissions:
-      - "USER:Overall/Administer:admin"
+      - "USER:Overall/Administer:${JENKINS_ADMIN_ID}"
       - "GROUP:Overall/Read:authenticated"
   clouds:
-  - docker:
+  - docker: # <.>
       containerCap: 5
       dockerApi:
         connectTimeout: 60
@@ -22,9 +22,9 @@ jenkins:
         dockerTemplateBase:
           cpuPeriod: 0
           cpuQuota: 0
-          image: "jenkins/agent"
+          image: "jenkins/agent" # <.>
         instanceCapStr: "10"
-        labelString: "agent"
+        labelString: "agent" # <.>
         mode: EXCLUSIVE
         name: "Jenkins Agent"
         pullStrategy: PULL_ALWAYS
@@ -40,16 +40,16 @@ jenkins:
   - name: "docker_in_docker"
   - name: "master"
   labelString: "!!!DO_NOT_USE!!!"
-  numExecutors: 0
+  numExecutors: 0 # <.>
   remotingSecurity:
     enabled: true
-  securityRealm:
+  securityRealm: # <.>
     local:
       allowsSignup: false
       users:
         - id: ${JENKINS_ADMIN_ID}
           password: ${JENKINS_ADMIN_PASSWORD}
-jobs:
+jobs: # <.>
   - file: /var/jenkins_home/pipeline.groovy
 security:
   queueItemAuthenticator:
